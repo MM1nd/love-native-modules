@@ -77,3 +77,13 @@ Expected output starts with:
 ```text
 LOVE 12.0
 ```
+
+For a slightly deeper check, run one of LOVE's own source tests against the
+packaged runtime:
+
+```powershell
+.\dist\love\Release\love.exe .\megasource\libs\love\testing\main.lua --console --modules love
+```
+
+The test app exits when it finishes and writes its report files under
+`megasource/libs/love/testing/output`.
