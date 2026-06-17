@@ -12,20 +12,20 @@
   "buildPresets": [
     {
       "name": "love-release",
-      "displayName": "LOVE Release",
-      "configurePreset": "vs2022-x64",
-      "configuration": "Release",
-      "targets": [
-        "love/love"
-      ]
-    },
-    {
-      "name": "package-love-runtime-release",
-      "displayName": "Package LOVE Runtime Release",
+      "displayName": "LOVE Runtime Release",
       "configurePreset": "vs2022-x64",
       "configuration": "Release",
       "targets": [
         "package-love-runtime"
+      ]
+    },
+    {
+      "name": "examples-release",
+      "displayName": "Examples Release",
+      "configurePreset": "vs2022-x64",
+      "configuration": "Release",
+      "targets": [
+        "examples-release"
       ]
     }
   ]
