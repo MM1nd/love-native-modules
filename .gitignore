@@ -13,6 +13,7 @@ CMakeUserPresets.json
 
 # Local wrapper workspace
 /build/
+/dist/
 /megasource/
 /modules/
 
