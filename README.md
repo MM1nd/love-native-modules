@@ -138,3 +138,14 @@ runtime:
 
 The test app exits when it finishes and writes report files under
 `megasource/libs/love/testing/output`.
+
+## TODO
+
+- Decide whether to support multiple generators/toolchains side by side. The
+  current wrapper intentionally has one blessed CMake preset and one `build/`
+  plus `dist/` layout. Supporting toolchains such as a future Visual Studio
+  version at the same time would likely require generator-specific build and
+  dist folders to avoid preset sprawl and accidental ABI/toolchain mixing.
+- Decide how to support debugging native modules in context. The useful case is
+  stepping through a module DLL while it is loaded by the local LOVE runtime,
+  without necessarily debugging or rebuilding LOVE itself.
