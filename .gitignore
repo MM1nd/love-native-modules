@@ -15,7 +15,8 @@ CMakeUserPresets.json
 /build/
 /dist/
 /megasource/
-/modules/
+/modules/*
+!/modules/CMakeLists.txt
 
 # CLion
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can

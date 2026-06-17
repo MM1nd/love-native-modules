@@ -27,6 +27,15 @@
       "targets": [
         "examples-release"
       ]
+    },
+    {
+      "name": "modules-release",
+      "displayName": "Modules Release",
+      "configurePreset": "vs2022-x64",
+      "configuration": "Release",
+      "targets": [
+        "modules-release"
+      ]
     }
   ]
 }

@@ -48,8 +48,5 @@ if(TARGET love)
 		COMMENT "Copying LOVE runtime files to dist/love/$<CONFIG>")
 endif()
 
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/modules/CMakeLists.txt")
-	add_subdirectory(modules)
-endif()
-
+add_subdirectory(modules)
 add_subdirectory(examples)

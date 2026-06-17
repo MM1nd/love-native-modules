@@ -3,22 +3,28 @@
 An opinionated CMake wrapper for building native Lua/LuaJIT modules against a
 local https://love2d.org/ build from https://github.com/love2d/megasource.
 
-The purpose is LuaJIT ABI alignment. A native module should compile against the
-same LuaJIT headers, link against the same `lua51.lib`, and load beside the same
-`lua51.dll` that the packaged LOVE runtime uses. This wrapper makes that the
-default path instead of something every module has to rediscover.
+The purpose is ABI alignment. A native module should compile against the same
+LuaJIT headers, link against the same `lua51.lib`, load beside the same
+`lua51.dll`, and use the same configured compiler/linker toolchain as the
+packaged LOVE runtime. This wrapper makes that the default path instead of
+something every module has to rediscover.
+
+On Windows/MSVC, this matters because the LuaJIT import library and native
+module DLLs should be produced by the same Visual Studio toolchain family. The
+wrapper configures LOVE and modules in one CMake build so they share the same
+generator, architecture, compiler, linker, and runtime assumptions.
 
 ## Shape
 
-This repository owns the wrapper CMake, helper functions, and tracked examples.
-The large or local pieces stay outside git:
+This repository owns the wrapper CMake, helper functions, the `modules/`
+dispatcher, and tracked examples. The large or local pieces stay outside git:
 
 ```text
 love-native-modules/
   megasource/  # local clone of love2d/megasource
     libs/
       love/    # local clone of love2d/love, as expected by megasource
-  modules/     # ignored workspace for local/native module projects
+  modules/     # tracked dispatcher; ignored local module projects inside it
   build/       # generated build tree for LOVE and modules
   dist/        # packaged LOVE runtime and selected module binaries
   examples/    # tracked self-checks and usage examples
@@ -28,9 +34,9 @@ The folder names are part of the interface. CMake is expected to run from this
 repository root and use `build/` as its build tree. `build/` keeps the full
 development output; `dist/` is the cleaner runnable view.
 
-If `modules/CMakeLists.txt` exists locally, the outer wrapper includes it. Local
-modules can use the same helper as the tracked examples while staying outside
-this repository's history.
+The `modules/` folder has a tracked `CMakeLists.txt` owned by this wrapper. It
+discovers local module subdirectories with their own `CMakeLists.txt`; those
+module subdirectories are ignored by git.
 
 ## Setup
 
@@ -55,9 +61,15 @@ cmake --build --preset love-release
 to `dist/love/Release`. The full build output remains in `build/love/Release`,
 including development files such as `.lib` outputs.
 
+`dist/love/Release` is the stable local runtime location for this wrapper. During
+development, point scripts or PATH entries there instead of at an official LOVE
+install if you want to run against the same locally built runtime and native
+modules.
+
 ## Native Modules
 
-Modules should declare only their own sources and output name:
+Drop local modules under `modules/`. Each module owns its own `CMakeLists.txt`
+and should declare only its sources and output name:
 
 ```cmake
 add_love_native_module(my-module
@@ -66,9 +78,16 @@ add_love_native_module(my-module
 ```
 
 The wrapper supplies the LuaJIT include directory, import library, build
-dependency, and package destination derived from the megasource build. Packaged
-module DLLs are copied next to `love.exe` in `dist/love/Release`, so Lua can
-load them with plain `require("mymodule")`.
+dependency, package destination, and active C/C++ toolchain from the same CMake
+configuration that builds LOVE. Packaged module DLLs are copied next to
+`love.exe` in `dist/love/Release`, so Lua can load them with plain
+`require("mymodule")`.
+
+Build and package all local modules:
+
+```powershell
+cmake --build --preset modules-release
+```
 
 ## Examples
 
