@@ -149,3 +149,11 @@ The test app exits when it finishes and writes report files under
 - Decide how to support debugging native modules in context. The useful case is
   stepping through a module DLL while it is loaded by the local LOVE runtime,
   without necessarily debugging or rebuilding LOVE itself.
+
+## Prior Art
+
+- [Nigh/Dll_for_Love2D_sample](https://github.com/Nigh/Dll_for_Love2D_sample)
+  shows the basic shape of a native Lua module for LOVE: export `luaopen_*`,
+  place the DLL where `require` can find it, and call it from Lua. This wrapper
+  keeps that loading model, but avoids vendored or mismatched Lua headers/libs by
+  deriving them from the local megasource build.
